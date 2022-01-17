@@ -1,0 +1,7 @@
+[core]
+	excludesfile = /Users/ricardoabreu/.gitignore
+[user]
+	name = Ricardo
+	email = ricardo@yonkolevel.com
+[init]
+	defaultBranch = main
