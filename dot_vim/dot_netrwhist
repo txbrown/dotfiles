@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =4
+let g:netrw_dirhistcnt =5
+let g:netrw_dirhist_5='/Users/ricardoabreu/Development/push-simulator-2023'
 let g:netrw_dirhist_4='/Users/ricardoabreu/Development/yonkolevel/midicircuit-macos/fastlane'
 let g:netrw_dirhist_3='/Users/ricardoabreu/Development/yonkolevel/midicircuit-macos'
 let g:netrw_dirhist_2='/Users/ricardoabreu/Development/yonkolevel/midicircuit-macos/fastlane'
