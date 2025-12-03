@@ -1,0 +1,6 @@
+# Ignore oh-my-zsh installation directory
+# We'll manage oh-my-zsh through its own installer
+.oh-my-zsh/**
+
+# Keep custom configurations if needed in the future
+# !.oh-my-zsh/custom/**
