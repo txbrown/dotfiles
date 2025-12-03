@@ -1,0 +1,16 @@
+[core]
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore
+[user]
+	name = {{ .git.name }}
+	email = {{ if .is_work }}{{ .work.email }}{{ else }}{{ .git.email }}{{ end }}
+[init]
+	defaultBranch = main
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+{{- if .is_work }}
+[http]
+	proxy = {{ .work.proxy }}
+{{- end }}
