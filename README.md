@@ -40,7 +40,17 @@ Create `~/.config/chezmoi/chezmoi.toml` with:
 Files ending in `.tmpl` use Go templates to insert machine-specific values:
 
 - **`.gitconfig.tmpl`** - Uses different email based on `is_work` flag
-- **`.zshrc.tmpl`** - Can have work-specific aliases/paths
+- **`.zshrc.tmpl`** - Keeps shared shell config and branches on `is_work`
+
+### Local-only Secrets
+
+Keep secrets and machine-only exports out of the repo in:
+
+```bash
+~/.zshrc.local
+```
+
+This file is sourced by `.zshrc` if it exists.
 
 ### Template Variables Available
 

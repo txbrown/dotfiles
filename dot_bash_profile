@@ -1,12 +1,16 @@
-[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+export PATH="$PATH:/Applications/010 Editor.app/Contents/CmdLine" #ADDED BY 010 EDITOR
+export PATH=$PATH:$HOME/.maestro/bin
 
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
+########### Essentia exports ###########
+export ESSENTIA_THIRDPARTY=/essentia/third_party
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$ESSENTIA_THIRDPARTY/lib
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$ESSENTIA_THIRDPARTY/pkgconfig
 
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
+########### Essentia exports ###########
+export ESSENTIA_THIRDPARTY=/essentia/third_party
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$ESSENTIA_THIRDPARTY/lib
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$ESSENTIA_THIRDPARTY/pkgconfig
 
-export PATH="$HOME/.poetry/bin:$PATH"
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+
+eval "$(rbenv init -)"

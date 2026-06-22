@@ -3,6 +3,12 @@
 [user]
 	name = {{ .git.name }}
 	email = {{ if .is_work }}{{ .work.email }}{{ else }}{{ .git.email }}{{ end }}
+[credential]
+	helper = osxkeychain
+[merge]
+	tool = vscode
+[mergetool "vscode"]
+	cmd = code --wait --merge $REMOTE $LOCAL $BASE $MERGED
 [init]
 	defaultBranch = main
 [filter "lfs"]
@@ -10,7 +16,7 @@
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
-{{- if .is_work }}
+{{- if and .is_work .work.proxy }}
 [http]
 	proxy = {{ .work.proxy }}
 {{- end }}

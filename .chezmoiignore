@@ -1,3 +1,6 @@
+# Ignore repo docs from being deployed into $HOME
+README.md
+
 # Ignore oh-my-zsh installation directory
 # We'll manage oh-my-zsh through its own installer
 .oh-my-zsh/**
