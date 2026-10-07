@@ -8,6 +8,6 @@ Do not copy these items to replacement Mac:
 - Homebrew, npm, Mason, Swift, Android, iOS, Neovim, and build caches.
 - `node_modules`, CocoaPods `Pods`, Xcode `DerivedData`, Android build outputs, iOS build outputs, and generated package data.
 - Neovim state/cache, plugin installations, shada, swap files, and logs.
-- Whole-home-directory or whole-repository archives.
+- Whole-home-directory or whole-repository copies.
 
 Reinstall or regenerate these from package managers, source repositories, company enrollment, or project tooling on the replacement Mac.

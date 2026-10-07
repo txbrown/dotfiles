@@ -54,16 +54,15 @@ This file is sourced by `.zshrc` if it exists.
 
 ### Laptop Migration
 
-Current migration inventory, explicit non-migration rules, encrypted archive manifest, and replacement-Mac resetup plan live under `docs/migration/` and `docs/plans/`.
+Current migration inventory, explicit non-migration rules, setup check, and replacement-Mac resetup plan live under `docs/migration/` and `docs/plans/`.
 
 On the old Mac:
 
-1. Review `docs/migration/secret-archive-manifest.txt` and rotate exposed tokens.
-2. Run `docs/migration/create-encrypted-archive.sh` with a GPG passphrase stored in the password manager.
-3. Upload archive and checksum only to approved company storage.
-4. Push Chezmoi source, then validate the replacement Mac with `docs/plans/2026-06-22-new-machine-resetup-plan.md`.
+1. Run `docs/migration/check-reproducible-setup.sh`.
+2. Push Chezmoi source and review local-only repository status.
+3. Validate the replacement Mac with `docs/plans/2026-06-22-new-machine-resetup-plan.md`.
 
-Keep the archive allow-listed. Never copy Keychain, Apple signing, VPN/MDM material, Google Cloud SDK state, caches, or build outputs.
+Secrets are not archived. Re-authenticate services and regenerate project-local credentials through approved company/project systems. Never copy Keychain, Apple signing, VPN/MDM material, Google Cloud SDK state, caches, or build outputs.
 
 ### Template Variables Available
 

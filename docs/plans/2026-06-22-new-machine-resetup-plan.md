@@ -2,16 +2,16 @@
 
 ## Intent
 
-Rebuild replacement company Mac from committed Chezmoi configuration, non-secret manifests, source repositories, and the approved encrypted migration archive. Do not retire old Mac until validation passes.
+Rebuild replacement company Mac from committed Chezmoi configuration, non-secret manifests, and source repositories. Secrets and project-local credentials are regenerated or re-entered through approved company systems. Do not retire old Mac until validation passes.
 
 ## Inputs
 
 - Chezmoi repository: `https://github.com/txbrown/dotfiles.git`
 - Managed Homebrew manifest: `docs/migration/Brewfile`
+- Global npm manifest: `docs/migration/npm-global.Brewfile`
 - Version snapshots: `docs/migration/*-versions.txt`
-- Secret archive manifest: `docs/migration/secret-archive-manifest.txt`
-- Encrypted archive and checksum: obtain from approved company storage
-- Archive passphrase: retrieve from password manager
+- Setup check: `docs/migration/check-reproducible-setup.sh`
+- Non-migration rules: `docs/migration/non-migrating.md`
 
 ## Ordered execution
 
@@ -25,7 +25,7 @@ Rebuild replacement company Mac from committed Chezmoi configuration, non-secret
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install chezmoi gnupg git
+brew install git chezmoi
 ```
 
 Configure GitHub access using company-approved authentication. Do not copy managed Keychain material manually.
@@ -38,7 +38,6 @@ mkdir -p ~/.config/chezmoi
 $EDITOR ~/.config/chezmoi/chezmoi.toml
 chezmoi diff
 chezmoi apply
-chezmoi verify
 ```
 
 Set machine-specific values before apply:
@@ -65,15 +64,17 @@ brew bundle --file Brewfile --no-upgrade
 
 Install recorded runtime versions as needed from `runtime-versions.txt`:
 
-- Install/select Node `22.19.0` with nvm, then restore global npm packages:
-
 ```bash
 nvm install 22.19.0
 nvm alias default 22.19.0
 nvm use 22.19.0
 brew bundle --file npm-global.Brewfile --no-upgrade
 ```
+
+Then:
+
 - Install/select Tuist `4.29.0` with mise.
+- Install Java 17 (Azul Zulu 17 or approved equivalent) and confirm `/usr/libexec/java_home -v 17`.
 - Install required Python and Ruby versions with pyenv/rbenv.
 - Install Swift toolchains with swiftly only when project validation requires them.
 - Install recorded VS Code extensions from `vscode-extensions.txt`.
@@ -92,31 +93,11 @@ xcodebuild -version
 
 Install only Android SDK packages, AVDs, and iOS runtimes required by project validation. Do not copy emulator/simulator state.
 
-### 6. Restore approved encrypted files
+### 6. Clone active repositories
 
-Verify checksum before decrypting:
+Clone repositories from their remotes, then restore or regenerate project-local files through approved company/project systems. Before wiping old Mac, review its local-only `docs/migration/repository-status.txt` to recover branch names and identify unpushed work; this file is intentionally not committed to public Chezmoi repository. Resolve or intentionally discard old-machine working changes before retirement.
 
-```bash
-shasum -a 256 -c laptop-migration-<date>.tar.gpg.sha256
-```
-
-Decrypt and extract from the archive directory so paths restore relative to `$HOME`:
-
-```bash
-mkdir -p "$HOME/.migration-restore"
-gpg --decrypt laptop-migration-<date>.tar.gpg > "$HOME/.migration-restore/files.tar"
-tar -C "$HOME" -xf "$HOME/.migration-restore/files.tar"
-rm -rf "$HOME/.migration-restore"
-chmod 600 ~/.zshrc.local ~/.npmrc ~/.pi/agent/auth.json ~/.aws/credentials 2>/dev/null || true
-```
-
-Restore project-local files after cloning repositories. Confirm each path against `secret-archive-manifest.txt`; do not restore excluded managed credentials or Google Cloud SDK state.
-
-### 7. Clone active repositories
-
-Clone repositories from their remotes, then restore reviewed local files into expected paths. Before wiping old Mac, review its local-only `docs/migration/repository-status.txt` to recover branch names and identify unpushed work; this file is intentionally not committed to public Chezmoi repository. Resolve or intentionally discard old-machine working changes before retirement.
-
-For TOCS, explicitly restore only approved files:
+For TOCS, obtain approved current values for:
 
 - `.npmrc`
 - `.env`
@@ -126,18 +107,18 @@ For TOCS, explicitly restore only approved files:
 
 Do not copy `node_modules`, Pods, build outputs, DerivedData, generated package data, or `android/app/debug.keystore` unless repository policy later requires regeneration.
 
-### 8. Re-authenticate services
+### 7. Re-authenticate services
 
-Re-authenticate GitHub, Artifactory/npm, AWS, Jira, MCP, Copilot, Pi, and other services. Prefer fresh tokens when old tokens were exposed or expired. Confirm company policy before retaining copied SSH/AWS credentials.
+Re-authenticate GitHub, Artifactory/npm, AWS, Jira, MCP, Copilot, Pi, and other services. Use fresh tokens when old tokens were exposed or expired. Confirm company policy for SSH/AWS credential issuance. Keep Pi auth and MCP auth outside Chezmoi source files.
 
-### 9. Validate before old-machine retirement
+### 8. Validate before old-machine retirement
 
 ```bash
 chezmoi verify
-brew bundle check --file "$(chezmoi source-path)/docs/migration/Brewfile"
-nvim --headless '+qa'
+"$(chezmoi source-path)/docs/migration/check-reproducible-setup.sh"
 node --version
 npm --version
+java -version
 xcode-select -p
 xcodebuild -version
 ```
@@ -148,14 +129,15 @@ Then validate:
 - Git identity and credential helper are correct.
 - Pi starts with expected extensions/configuration.
 - Neovim Lazy lock, LSP, formatter, debugger, and Treesitter work.
-- Xcode, `xcodebuild`, Tuist, Fastlane, Android SDK, and TOCS builds work.
-- Encrypted archive decrypts and restores expected files.
+- Xcode, `xcodebuild`, Tuist, Fastlane, Android SDK, Java 17, and TOCS builds work.
+- Every required project secret was obtained from approved systems and is absent from Git.
 - All active repositories have pushed commits and no required uncommitted work remains.
 
-Only after all checks pass: revoke old-machine access where required, remove old archive copies, and wipe/return old Mac according to company process.
+Only after all checks pass: revoke old-machine access where required and wipe/return old Mac according to company process.
 
 ## Explicit non-goals
 
+- Creating or transferring an encrypted migration bundle.
 - Copying all of `~/Library` or all of `$HOME`.
 - Copying company-managed Keychain, signing, VPN, MDM, or provisioning material.
 - Copying Google Cloud SDK/configuration.

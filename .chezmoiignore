@@ -4,6 +4,13 @@ docs/**
 .context/**
 .config/nvim/.DS_Store
 .config/nvim/.git/**
+.config/nvim/lazy/**
+.config/nvim/.cache/**
+.config/nvim/.local/**
+.config/nvim/*.swp
+.config/nvim/*.swo
+.config/nvim/*.shada
+.config/nvim/*.log
 
 # Ignore oh-my-zsh installation directory
 # We'll manage oh-my-zsh through its own installer

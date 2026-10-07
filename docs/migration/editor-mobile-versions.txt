@@ -11,6 +11,12 @@ drwxr-xr-x@ 3 ricardo.abreu  staff  96 21 Feb  2026 /Applications/Xcode-26.3.0.a
 lrwxr-xr-x@ 1 ricardo.abreu  admin  30 26 Feb  2025 /Applications/Xcode.app -> /Applications/Xcode-15.4.0.app
 drwxr-xr-x@ 3 ricardo.abreu  admin  96 16 Jun  2025 /Applications/Xcodes.app
 
+## Java
+openjdk version "17.0.15" 2025-04-15 LTS
+OpenJDK Runtime Environment Zulu17.58+21-CA
+17.0.15 (arm64) "Azul Systems, Inc." - "Zulu 17.58.21" /Library/Java/JavaVirtualMachines/zulu-17.jdk/Contents/Home
+11.0.23 (arm64) "Azul Systems, Inc." - "Zulu 11.72.19" /Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home
+
 ## Android SDK packages
 Loading package information...
 Loading local repository...
