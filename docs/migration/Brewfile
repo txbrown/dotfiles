@@ -1,0 +1,137 @@
+tap "krishkrosh/apps"
+tap "modem-dev/tap"
+# Run your GitHub Actions locally
+brew "act"
+# Email client that runs in your terminal
+brew "aerc"
+# Shell extension to jump to frequently used directories
+brew "autojump"
+# Official Amazon AWS command-line interface
+brew "awscli"
+# Command-line tool to manipulate Android App Bundles
+brew "bundletool"
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# Diff that understands syntax
+brew "difftastic"
+# .NET Core
+brew "dotnet@8"
+# Easiest way to build and release mobile apps
+brew "fastlane"
+# GitHub command-line tool
+brew "gh"
+# Git extension for versioning large files
+brew "git-lfs"
+# Simple terminal UI for git commands
+brew "lazygit"
+# Polyglot runtime manager (asdf rust clone)
+brew "mise"
+# Deep clean and optimize your Mac
+brew "mole"
+# Ambitious Vim-fork focused on extensibility and agility
+brew "neovim"
+# Manage multiple Node.js versions
+brew "nvm"
+# Create, run, and share large language models (LLMs)
+brew "ollama"
+# Tool for managing OCI containers and pods
+brew "podman"
+# Python version management
+brew "pyenv"
+# Ruby version manager
+brew "rbenv"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
+# Powerful, clean, object-oriented scripting language
+brew "ruby@3.3"
+# Watch files and take action when they change
+brew "watchman"
+# Little beautifier tool for xcodebuild
+brew "xcbeautify"
+# Terminal-based AI coding assistant
+cask "claude-code"
+# OpenAI's coding agent that runs in your terminal
+cask "codex"
+# Brings the power of Copilot coding agent directly to your terminal
+cask "copilot-cli"
+cask "trackweight"
+# Open-source code editor
+cask "visual-studio-code"
+vscode "aaron-bond.better-comments"
+vscode "adrianwilczynski.csharp-to-typescript"
+vscode "alefragnani.bookmarks"
+vscode "alexdima.copy-relative-path"
+vscode "atlassian.atlascode"
+vscode "charkoal.charkoal"
+vscode "dart-code.dart-code"
+vscode "dart-code.flutter"
+vscode "dbaeumer.vscode-eslint"
+vscode "donjayamanne.githistory"
+vscode "dsznajder.es7-react-js-snippets"
+vscode "dustinsanders.an-old-hope-theme-vscode"
+vscode "eamodio.gitlens"
+vscode "ericadamski.carbon-now-sh"
+vscode "esafirm.kotlin-formatter"
+vscode "esbenp.prettier-vscode"
+vscode "formulahendry.auto-close-tag"
+vscode "formulahendry.auto-rename-tag"
+vscode "fwcd.kotlin"
+vscode "github.copilot-chat"
+vscode "github.github-vscode-theme"
+vscode "github.vscode-github-actions"
+vscode "golang.go"
+vscode "graphql.vscode-graphql"
+vscode "graphql.vscode-graphql-execution"
+vscode "graphql.vscode-graphql-syntax"
+vscode "gruntfuggly.todo-tree"
+vscode "infeng.vscode-react-typescript"
+vscode "jnbt.vscode-rufo"
+vscode "josetr.cmake-language-support-vscode"
+vscode "juanallo.vscode-dependency-cruiser"
+vscode "k--kato.docomment"
+vscode "kishoreithadi.dotnet-core-essentials"
+vscode "llvm-vs-code-extensions.lldb-dap"
+vscode "mathiasfrohlich.kotlin"
+vscode "meganrogge.template-string-converter"
+vscode "mjmlio.vscode-mjml"
+vscode "ms-dotnettools.csharp"
+vscode "ms-dotnettools.vscode-dotnet-runtime"
+vscode "ms-python.debugpy"
+vscode "ms-python.isort"
+vscode "ms-python.python"
+vscode "ms-python.vscode-pylance"
+vscode "ms-python.vscode-python-envs"
+vscode "ms-toolsai.jupyter"
+vscode "ms-toolsai.jupyter-keymap"
+vscode "ms-toolsai.jupyter-renderers"
+vscode "ms-toolsai.vscode-jupyter-cell-tags"
+vscode "ms-toolsai.vscode-jupyter-slideshow"
+vscode "ms-vscode-remote.remote-containers"
+vscode "ms-vscode.cmake-tools"
+vscode "ms-vscode.cpp-devtools"
+vscode "ms-vscode.cpptools"
+vscode "ms-vscode.cpptools-extension-pack"
+vscode "ms-vscode.cpptools-themes"
+vscode "ms-vsliveshare.vsliveshare"
+vscode "naumovs.color-highlight"
+vscode "pawelgrzybek.gatito-theme"
+vscode "pkief.material-icon-theme"
+vscode "pnp.polacode"
+vscode "rebornix.ruby"
+vscode "redhat.vscode-commons"
+vscode "redhat.vscode-xml"
+vscode "redhat.vscode-yaml"
+vscode "ritwickdey.liveserver"
+vscode "sswg.swift-lang"
+vscode "streetsidesoftware.code-spell-checker"
+vscode "svelte.svelte-vscode"
+vscode "swiftlang.swift-vscode"
+vscode "sz-p.dependencygraph"
+vscode "teabyii.ayu"
+vscode "twxs.cmake"
+vscode "tyriar.lorem-ipsum"
+vscode "vadimcn.vscode-lldb"
+vscode "vknabel.vscode-swiftformat"
+vscode "vknabel.vscode-swiftlint"
+vscode "vscode-icons-team.vscode-icons"
+vscode "wingrunr21.vscode-ruby"

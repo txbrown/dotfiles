@@ -1,5 +1,9 @@
 # Ignore repo docs from being deployed into $HOME
 README.md
+docs/**
+.context/**
+.config/nvim/.DS_Store
+.config/nvim/.git/**
 
 # Ignore oh-my-zsh installation directory
 # We'll manage oh-my-zsh through its own installer

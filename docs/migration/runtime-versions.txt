@@ -1,0 +1,66 @@
+# Runtime manager snapshot
+# Generated: 2026-10-07T10:58:15Z
+
+## nvm
+        v8.12.0 *
+        v8.17.0 *
+       v11.15.0 *
+      v12.22.12 *
+       v13.14.0 *
+       v16.16.0 *
+       v16.20.0 *
+       v18.20.3 *
+       v20.13.0 *
+       v20.19.4 *
+        v22.2.0 *
+       v22.17.0 *
+->     v22.19.0 *
+       v23.11.0 *
+       v23.11.1 *
+default -> 22.19.0 (-> v22.19.0 *)
+iojs -> N/A (default)
+node -> stable (-> v23.11.1 *) (default)
+stable -> 23.11 (-> v23.11.1 *) (default)
+unstable -> N/A (default)
+lts/* -> lts/krypton (-> N/A)
+lts/argon -> v4.9.1 (-> N/A)
+lts/boron -> v6.17.1 (-> N/A)
+lts/carbon -> v8.17.0 *
+lts/dubnium -> v10.24.1 (-> N/A)
+lts/erbium -> v12.22.12 *
+lts/fermium -> v14.21.3 (-> N/A)
+lts/gallium -> v16.20.2 (-> N/A)
+lts/hydrogen -> v18.20.8 (-> N/A)
+lts/iron -> v20.20.2 (-> N/A)
+lts/jod -> v22.23.0 (-> N/A)
+lts/krypton -> v24.17.0 (-> N/A)
+
+## mise
+2025.10.19 macos-arm64 (2025-10-28)
+tuist  4.29.0  ~/.config/mise/config.toml  4.29.0
+
+## pyenv
+pyenv 2.6.12
+2.7.18
+3.9.20
+3.13.0
+
+## rbenv
+rbenv 1.3.2
+2.7.4
+2.7.5
+3.0.0
+3.1.0
+
+## swiftly
+Installed release toolchains
+----------------------------
+Swift 6.2.3
+Swift 6.1.2 (in use) (default)
+Swift 5.9.2
+
+Installed snapshot toolchains
+-----------------------------
+
+## Tuist
+4.29.0
