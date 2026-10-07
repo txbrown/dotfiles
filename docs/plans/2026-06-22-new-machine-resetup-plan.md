@@ -114,7 +114,7 @@ Restore project-local files after cloning repositories. Confirm each path agains
 
 ### 7. Clone active repositories
 
-Clone repositories from their remotes, then restore reviewed local files into expected paths. Use `repository-status.txt` to recover branch names and identify unpushed work. Resolve or intentionally discard old-machine working changes before retirement.
+Clone repositories from their remotes, then restore reviewed local files into expected paths. Before wiping old Mac, review its local-only `docs/migration/repository-status.txt` to recover branch names and identify unpushed work; this file is intentionally not committed to public Chezmoi repository. Resolve or intentionally discard old-machine working changes before retirement.
 
 For TOCS, explicitly restore only approved files:
 
