@@ -7,6 +7,7 @@ Rebuild development setup on replacement company Mac with minimal manual work, w
 ## Canonical sources
 
 - **Chezmoi:** shell, Git, terminal, Pi non-secret config, Homebrew manifests, Neovim config, and version snapshots.
+- **Encrypted GPG archive:** explicit allow-listed local-only files and approved authentication state.
 - **Git remotes:** committed source repositories.
 - **Reinstallation:** package-manager caches, Neovim plugins, Mason packages, build outputs, and derived data.
 - **Manual re-authentication:** secrets, project-local credentials, and service access are regenerated or re-entered on replacement Mac.
@@ -40,7 +41,7 @@ Neovim now lives in Chezmoi. Its NvChad-based configuration and `lazy-lock.json`
 - Mark each item as portable, reinstallable, machine-specific, or secret.
 - Inventory non-Homebrew applications and VS Code extensions.
 - Find project-local `.env` files, signing files, local certificates, Git worktrees, and uncommitted changes across the TOCS repository and other active repositories; classify each before handover.
-- For each project secret, record whether it is regenerated from company systems, manually re-entered, or intentionally excluded.
+- For each project secret, record whether it is restored from the encrypted bundle, regenerated from company systems, or intentionally excluded.
 - Record Android SDK/AVD, iOS simulator, and Xcode requirements only; do not migrate managed signing or certificate material.
 
 ### 2. Make Chezmoi reproducible
@@ -55,15 +56,32 @@ Neovim now lives in Chezmoi. Its NvChad-based configuration and `lazy-lock.json`
 - Keep Pi configuration and extensions in Chezmoi; keep Pi auth and MCP auth outside normal source files.
 - Update Chezmoi README with migration procedure and current work-machine setup.
 
-### 3. Skipped: encrypted migration bundle
+### 3. Build encrypted migration bundle
 
-This slice is intentionally skipped. Do not create or upload an encrypted bundle. Secrets, project-local credentials, GitHub access, AWS access, Artifactory/npm access, Jira, MCP, Copilot, and Pi authentication must be regenerated or re-entered on the replacement Mac.
+Use streamed tar archive encrypted with symmetric GPG/AES-256 and explicit allow-list. Review every path before creation; never archive all of `$HOME` or whole repositories.
 
-Still excluded from any migration:
+Global files to consider:
 
-- macOS login Keychain contents.
-- Apple Developer certificates, provisioning profiles, VPN certificates, MDM credentials, and managed signing material.
-- Google Cloud SDK/configuration, caches, build outputs, `node_modules`, Pods, DerivedData, Neovim state, and generated package data.
+- `~/.zshrc.local`
+- `~/.npmrc`
+- `~/.config/chezmoi/chezmoi.toml`
+- `~/.pi/agent/auth.json`
+- `~/.pi/agent/mcp-auth.json`
+- `~/.config/gh/hosts.yml`
+- `~/.aws/credentials`
+- Approved SSH keys and optional `~/.ssh/config`/`known_hosts`
+
+For TOCS, explicitly review as needed:
+
+- `~/Developer/trainline/tocs-app-2/.npmrc`
+- `~/Developer/trainline/tocs-app-2/.env`
+- `~/Developer/trainline/tocs-app-2/android/secrets.properties`
+- `~/Developer/trainline/tocs-app-2/android/app/google-services.json`
+- `~/Developer/trainline/tocs-app-2/ios/GoogleService-Info.plist`
+
+Rotate exposed or expired credentials before final archive. Store GPG passphrase in password manager. Upload archive and SHA-256 checksum only to approved company storage. Restore archive after checkout so paths land under expected `$HOME` locations.
+
+Exclude Google Cloud SDK/configuration, Chezmoi state, caches, build outputs, `node_modules`, Pods, DerivedData, Neovim state, generated package data, macOS Keychain, Apple signing/provisioning material, VPN certificates, MDM credentials, and other managed material.
 
 ### 4. Bootstrap replacement Mac
 
@@ -75,8 +93,8 @@ Still excluded from any migration:
 6. Install Xcodes.app and required Xcode versions; set `xcode-select` to intended version and remove broken symlinks.
 7. Install Node/npm, Java 17, and Pi at recorded versions; restore Pi non-secret config.
 8. Start Neovim once, sync Lazy plugins, and allow Mason to install configured tools.
-9. Clone active repositories and restore only files obtained through approved project/company systems.
-10. Re-authenticate GitHub, Artifactory, AWS, Jira, MCP, Copilot, Pi, and other services.
+9. Decrypt and restore approved local-only files from encrypted archive.
+10. Re-authenticate GitHub, Artifactory, AWS, Jira, MCP, Copilot, Pi, and other services where required.
 
 ### 5. Close remaining migration gaps
 
@@ -84,7 +102,8 @@ Still excluded from any migration:
 - Inventory browser profiles, password-manager access, VS Code extensions/settings, app licenses, and non-Homebrew application preferences needed for productive work.
 - Check every active repository for unpushed commits, local branches, stashes, Git worktrees, ignored build-critical files, and local databases/Podman volumes.
 - Decide whether emulator/simulator state is disposable; record required Android SDK packages, AVDs, iOS runtimes, and Xcode versions.
-- Re-enter or regenerate each project secret from its approved company/project source.
+- Re-enter or regenerate each project secret from its approved company/project source when it is not in encrypted archive.
+- Create archive manifest and SHA-256 checksum, then validate decryption/extraction on replacement Mac.
 
 ### 6. Validate before retiring old laptop
 
@@ -95,13 +114,14 @@ Still excluded from any migration:
 - `nvim` starts; Lazy lock is respected; LSP, formatter, debugger, and Treesitter work.
 - Pi starts with expected extensions/configuration.
 - Xcode, `xcodebuild`, Tuist, Fastlane, Android SDK, Java 17, and project builds work.
+- Encrypted archive decrypts on replacement Mac and restores expected files.
 - All repositories have pushed commits and no required uncommitted work remains.
 
 Only then wipe/return old laptop.
 
 ## Acceptance criteria
 
-- Replacement Mac can be rebuilt from Chezmoi, Homebrew manifests, version manifests, and source repositories.
+- Replacement Mac can be rebuilt from Chezmoi, Homebrew manifests, version manifests, source repositories, and encrypted archive.
 - Neovim and Pi non-secret configuration are restored without copying caches or generated state.
 - No secret file is committed to Git or uploaded plaintext.
 - Xcode selection is explicit and no broken `/Applications/Xcode.app` link remains.
@@ -120,5 +140,5 @@ Only then wipe/return old laptop.
 - Generated Homebrew, npm, runtime, Java, editor, mobile, VS Code, and repository status snapshots.
 - Imported Neovim configuration and lockfile into Chezmoi; made codelldb lookup portable through PATH/Mason.
 - Added portable Homebrew/Java shell resolution and repeatable setup check.
-- Added explicit non-migration list and replacement-Mac resetup plan at `docs/plans/2026-06-22-new-machine-resetup-plan.md`.
-- Encrypted migration bundle slice intentionally skipped by decision.
+- Added explicit non-migration list, encrypted archive helper/manifest, setup check, and replacement-Mac resetup plan at `docs/plans/2026-06-22-new-machine-resetup-plan.md`.
+- Encrypted archive remains to be created after final credential review and rotation.
