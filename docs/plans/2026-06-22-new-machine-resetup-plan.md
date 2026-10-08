@@ -12,6 +12,7 @@ Rebuild replacement company Mac from committed Chezmoi configuration, non-secret
 - Setup check: `docs/migration/check-reproducible-setup.sh`
 - Secret archive manifest: `docs/migration/secret-archive-manifest.txt`
 - Encrypted archive and checksum: obtain from approved company storage
+- Custom Pi/agent skill files: restored from the explicit archive manifest
 - Archive passphrase: retrieve from password manager
 
 ## Ordered execution
@@ -112,7 +113,7 @@ rm -rf "$HOME/.migration-restore"
 chmod 600 ~/.zshrc.local ~/.npmrc ~/.pi/agent/auth.json ~/.aws/credentials 2>/dev/null || true
 ```
 
-Restore project-local files after cloning repositories. Confirm each path against `secret-archive-manifest.txt`; do not restore excluded managed credentials or Google Cloud SDK state.
+Restore project-local files after cloning repositories. Confirm each path against `secret-archive-manifest.txt`; do not restore excluded managed credentials or Google Cloud SDK state. The manifest also restores user-managed `~/.pi/agent/skills/` and `~/.agents/skills/` files; package-based Pi plugins are reinstalled from `Brewfile` and npm snapshots.
 
 ### 7. Clone active repositories
 

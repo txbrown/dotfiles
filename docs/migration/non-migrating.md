@@ -10,4 +10,6 @@ Do not copy these items to replacement Mac:
 - Neovim state/cache, plugin installations, shada, swap files, and logs.
 - Whole-home-directory or whole-repository copies.
 
-Reinstall or regenerate these from package managers, source repositories, company enrollment, or project tooling on the replacement Mac.
+User-managed skill source files under `~/.pi/agent/skills/` and `~/.agents/skills/` are the exception: they are explicitly listed in `secret-archive-manifest.txt` for encrypted transfer. Reinstallable Pi package caches and `node_modules` remain excluded.
+
+Reinstall or regenerate excluded items from package managers, source repositories, company enrollment, or project tooling on the replacement Mac.

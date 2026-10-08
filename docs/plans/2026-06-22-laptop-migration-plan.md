@@ -70,6 +70,7 @@ Global files to consider:
 - `~/.config/gh/hosts.yml`
 - `~/.aws/credentials`
 - Approved SSH keys and optional `~/.ssh/config`/`known_hosts`
+- User-managed AI skills under `~/.pi/agent/skills/` and `~/.agents/skills/`
 
 For TOCS, explicitly review as needed:
 
@@ -79,7 +80,7 @@ For TOCS, explicitly review as needed:
 - `~/Developer/trainline/tocs-app-2/android/app/google-services.json`
 - `~/Developer/trainline/tocs-app-2/ios/GoogleService-Info.plist`
 
-Rotate exposed or expired credentials before final archive. Store GPG passphrase in password manager. Upload archive and SHA-256 checksum only to approved company storage. Restore archive after checkout so paths land under expected `$HOME` locations.
+Rotate exposed or expired credentials before final archive. Store GPG passphrase in password manager. Upload archive and SHA-256 checksum only to approved company storage. Restore archive after checkout so paths land under expected `$HOME` locations. Reinstallable Pi plugins remain represented by `settings.json`, `Brewfile`, and npm version snapshots; do not archive package caches or node_modules.
 
 Exclude Google Cloud SDK/configuration, Chezmoi state, caches, build outputs, `node_modules`, Pods, DerivedData, Neovim state, generated package data, macOS Keychain, Apple signing/provisioning material, VPN certificates, MDM credentials, and other managed material.
 
@@ -141,4 +142,4 @@ Only then wipe/return old laptop.
 - Imported Neovim configuration and lockfile into Chezmoi; made codelldb lookup portable through PATH/Mason.
 - Added portable Homebrew/Java shell resolution and repeatable setup check.
 - Added explicit non-migration list, encrypted archive helper/manifest, setup check, and replacement-Mac resetup plan at `docs/plans/2026-06-22-new-machine-resetup-plan.md`.
-- Encrypted archive remains to be created after final credential review and rotation.
+- Encrypted archive remains to be created after final credential review and rotation; manifest now explicitly includes custom Pi/agent skill files.

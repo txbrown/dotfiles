@@ -59,7 +59,7 @@ Current migration inventory, explicit non-migration rules, encrypted archive man
 On the old Mac:
 
 1. Review `docs/migration/secret-archive-manifest.txt` and rotate exposed tokens.
-2. Run `docs/migration/check-reproducible-setup.sh`.
+2. Run `docs/migration/check-reproducible-setup.sh`; this includes custom Pi/agent skills.
 3. Run `docs/migration/create-encrypted-archive.sh`; enter GPG passphrase stored in password manager.
 4. Upload archive and checksum only to approved company storage.
 5. Push Chezmoi source and validate the replacement Mac with `docs/plans/2026-06-22-new-machine-resetup-plan.md`.
