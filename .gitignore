@@ -1,2 +1,5 @@
 .context/
+.DS_Store
+__pycache__/
+*.pyc
 docs/migration/repository-status.txt

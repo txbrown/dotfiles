@@ -1,0 +1,33 @@
+{
+  "settings": {
+    "toolPrefix": "server",
+    "autoAuth": true,
+    "requestTimeoutMs": 60000
+  },
+  "mcpServers": {
+    "argent": {
+      "command": "argent",
+      "args": ["mcp"],
+      "lifecycle": "lazy",
+      "disabled": true
+    },
+    "atlassian-rovo": {
+      "url": "https://mcp.atlassian.com/v2/mcp",
+      "lifecycle": "lazy",
+      "openUi": false
+    },
+    "newrelic": {
+      "url": "https://mcp.newrelic.com/mcp/",
+      "auth": "oauth",
+      "headers": { "include-tags": "discovery,data-access" },
+      "lifecycle": "lazy"
+    }
+    {{- if and (hasKey . "pi_local") (hasKey .pi_local "firebase_project_dir") }},
+    "firebase": {
+      "command": {{ joinPath .chezmoi.homeDir ".local/bin/firebase" | toJson }},
+      "args": ["mcp", "--dir", {{ .pi_local.firebase_project_dir | toJson }}, "--only", "crashlytics"],
+      "lifecycle": "lazy"
+    }
+    {{- end }}
+  }
+}

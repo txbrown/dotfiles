@@ -1,24 +1,12 @@
 {
   "subagents": {
     "agentOverrides": {
-      "context-builder": {
-        "model": ""
-      },
-      "planner": {
-        "model": ""
-      },
-      "researcher": {
-        "model": ""
-      },
-      "reviewer": {
-        "model": ""
-      },
-      "scout": {
-        "model": ""
-      },
-      "worker": {
-        "model": ""
-      }
+      "context-builder": { "model": "" },
+      "planner": { "model": "" },
+      "researcher": { "model": "" },
+      "reviewer": { "model": "" },
+      "scout": { "model": "" },
+      "worker": { "model": "" }
     }
   },
   "packages": [
@@ -53,19 +41,25 @@
     "git:github.com/javierportillo/pi-hackerman@63b0a3ef2c7b14985ffeb6cac44614ba59cd5693",
     "npm:@victor-software-house/pi-curated-themes",
     "npm:pi-terminal-theme",
-    "npm:@leing2021/super-pi"
+    "npm:@leing2021/super-pi",
+    "git:github.com/txbrown/pi-clarity-engineering",
+    "git:github.com/EveryInc/compound-engineering-plugin",
+    "../../Developer/pi-staff-workflow"
   ],
-  "lastChangelogVersion": "0.79.10",
+  "lastChangelogVersion": "1.4.0",
   "defaultProvider": "github-copilot",
   "defaultModel": "gpt-5.5",
   "defaultThinkingLevel": "medium",
   "theme": "dark",
+  "hideThinkingBlock": false,
+  "extensions": ["-builtin:mcp"]
+  {{- if hasKey . "pi_memory" }},
   "pi-memory-md": {
     "memoryDir": {
-      "repoUrl": "git@github.com:trainline-private/ricardo-pi-memory.git",
-      "localPath": "~/.pi/work-memory-md",
+      "repoUrl": {{ .pi_memory.repo_url | toJson }},
+      "localPath": {{ .pi_memory.local_path | toJson }},
       "globalMemory": "global"
     }
-  },
-  "hideThinkingBlock": false
+  }
+  {{- end }}
 }

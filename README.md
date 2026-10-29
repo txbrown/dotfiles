@@ -64,7 +64,7 @@ On the old Mac:
 4. Upload archive and checksum only to approved company storage.
 5. Push Chezmoi source and validate the replacement Mac with `docs/plans/2026-06-22-new-machine-resetup-plan.md`.
 
-Keep archive allow-listed. Never copy Keychain, Apple signing, VPN/MDM material, Google Cloud SDK state, caches, or build outputs.
+Keep archive allow-listed. Never copy Keychain, Apple signing, VPN/MDM material, Google Cloud SDK state, caches, or build outputs. The reproducibility check validates current managed content and package declarations; it does not certify signing, credentials, mobile builds, or every extension's runtime behaviour.
 
 ### Template Variables Available
 
@@ -103,6 +103,51 @@ chezmoi add ~/.config/nvim/lua/personal/
 # Keep work-specific in separate file
 # Add to .chezmoiignore: .config/nvim/lua/work/
 ```
+
+## Obsidian plugin sync
+
+The helper is managed as `~/.local/bin/obsidian-sync-plugins`:
+
+```sh
+chezmoi apply ~/.local/bin/obsidian-sync-plugins
+obsidian-sync-plugins          # preview
+obsidian-sync-plugins --apply  # quit Obsidian first
+```
+
+It synchronises the union of enabled plugins across the parent Documents vault and its Trainline, Ricardo, Yonko Level Docs, and ai child vaults. It chooses the newest complete installed version, rejects conflicting builds of the same version, and backs up overwritten files under the vault's `.vault-tools/backups/`. It preserves per-vault settings and layouts. Sync is on demand, not automatic; disable a plugin in every vault before syncing to disable it everywhere.
+
+The default root is `~/Library/Mobile Documents/iCloud~md~obsidian/Documents`. Override with `OBSIDIAN_VAULT_ROOT` or `--root PATH`, and override the child vault list with repeated `--vault NAME` flags. Plugin binaries, settings, and backups stay out of this repository.
+
+Tests: `python3 -m unittest discover -s docs/tests -v`.
+
+## Existing checkout location
+
+If the checkout is in `~/Developer/dotfiles` rather than Chezmoi's default directory, set this **top-level** value before any `[data]` section in `~/.config/chezmoi/chezmoi.toml`:
+
+```toml
+sourceDir = "/absolute/path/to/Developer/dotfiles"
+```
+
+`chezmoi source-path` must point to an existing checkout. Avoid a blanket apply when adopting an existing machine: inspect local changes first. `chezmoi status` also reports permission differences; the reproducibility check accepts stricter local permissions while checking content and rejecting group/world-writable files.
+
+## Pi configuration
+
+Install Pi using its official standalone installer, then reconcile packages declared in `settings.json` with `pi update --extensions`. Extensions are Pi-managed packages, not global npm installs. `docs/migration/npm-global.Brewfile` is a historical snapshot, not a current dependency check. The local `~/Developer/pi-staff-workflow` package must be checked out before starting Pi on a new machine.
+
+The active MCP configuration is `~/.pi/agent/mcp-adapter.json`, managed by the adapter; the old `mcp.json` is no longer deployed. OAuth tokens, authentication stores, sessions, caches, and local state must never be added to dotfiles.
+
+Optional machine-only data belongs in `~/.config/chezmoi/chezmoi.toml`, not Git:
+
+```toml
+[data.pi_memory]
+repo_url = "<private memory repository URL>"
+local_path = "/absolute/path/to/local/memory"
+
+[data.pi_local]
+firebase_project_dir = "/absolute/path/to/firebase/project"
+```
+
+Without these sections, the generated settings omit the private memory configuration and Firebase server. MCP sign-in remains a separate step. Check `chezmoi cat ~/.pi/agent/settings.json` locally before applying; its rendered output can include private machine values, so do not publish it.
 
 ## Common Patterns
 

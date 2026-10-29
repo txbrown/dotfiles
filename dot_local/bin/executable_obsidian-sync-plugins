@@ -1,0 +1,148 @@
+#!/usr/bin/env python3
+"""Sync installed plugin code and the union of enabled lists; preserve settings.
+
+Preview: obsidian-sync-plugins
+Apply:   obsidian-sync-plugins --apply
+Override location with --root PATH or OBSIDIAN_VAULT_ROOT.
+Use repeated --vault NAME flags to override the default child vaults.
+Close Obsidian before applying so it cannot overwrite configuration changes.
+"""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import tempfile
+from datetime import datetime
+
+ROOT = Path.home() / 'Library/Mobile Documents/iCloud~md~obsidian/Documents'
+VAULTS = []
+FILES = ('manifest.json', 'main.js', 'styles.css')
+
+
+def version_key(version):
+    if not re.fullmatch(r'\d+\.\d+\.\d+', version):
+        raise ValueError(f'Unsupported version: {version}')
+    return tuple(map(int, version.split('.')))
+
+
+def digest(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
+
+
+def plan():
+    enabled = []
+    for vault in VAULTS:
+        path = vault / '.obsidian/community-plugins.json'
+        entries = json.loads(path.read_text()) if path.exists() else []
+        if not isinstance(entries, list) or not all(isinstance(x, str) for x in entries):
+            raise ValueError(f'Invalid plugin list: {path}')
+        for plugin in entries:
+            if not re.fullmatch(r'[A-Za-z0-9_-]+', plugin):
+                raise ValueError(f'Unsafe plugin ID: {plugin}')
+            if plugin not in enabled:
+                enabled.append(plugin)
+
+    sources = {}
+    for plugin in enabled:
+        candidates = []
+        for vault in VAULTS:
+            directory = vault / '.obsidian/plugins' / plugin
+            try:
+                manifest = json.loads((directory / 'manifest.json').read_text())
+                if manifest['id'] != plugin or not (directory / 'main.js').stat().st_size:
+                    continue
+                candidates.append((version_key(manifest['version']), directory))
+            except (OSError, ValueError, KeyError):
+                continue
+        if not candidates:
+            raise ValueError(f'No complete installation found for {plugin}; nothing changed')
+        newest = max(v for v, _ in candidates)
+        matches = [p for v, p in candidates if v == newest]
+        # Do not silently replace a locally patched build of the same version.
+        signatures = {tuple(digest(p / f) for f in FILES) for p in matches}
+        if len(signatures) != 1:
+            raise ValueError(f'Conflicting builds for {plugin} at {newest}; nothing changed')
+        sources[plugin] = matches[0]
+    return enabled, sources
+
+
+def main():
+    global ROOT, VAULTS
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--apply', action='store_true', help='Write changes (default: preview only)')
+    parser.add_argument('--root', type=Path, default=Path(os.environ.get('OBSIDIAN_VAULT_ROOT', str(ROOT))))
+    parser.add_argument('--vault', action='append', help='Child vault name; repeat for multiple vaults')
+    args = parser.parse_args()
+    ROOT = args.root.expanduser().resolve()
+    names = args.vault if args.vault is not None else ['Trainline', 'Ricardo', 'Yonko Level Docs', 'ai']
+    VAULTS = [ROOT]
+    for name in names:
+        child = (ROOT / name).resolve()
+        if not child.is_relative_to(ROOT) or child == ROOT:
+            parser.error('Child vaults must be strictly inside the root vault')
+        if child not in VAULTS:
+            VAULTS.append(child)
+    for vault in VAULTS:
+        if not (vault / '.obsidian').is_dir():
+            parser.error(f'Vault configuration not found: {vault / ".obsidian"}')
+    enabled, sources = plan()
+    # Read every source before writing any destination (including iCloud downloads).
+    payloads = {plugin: {f: (source / f).read_bytes() for f in FILES if (source / f).is_file()}
+                for plugin, source in sources.items()}
+    changes = []
+    for vault in VAULTS:
+        config = vault / '.obsidian'
+        changes.append((config / 'community-plugins.json', (json.dumps(enabled, indent=2) + '\n').encode()))
+        for plugin, files in payloads.items():
+            for name, content in files.items():
+                changes.append((config / 'plugins' / plugin / name, content))
+            # A newer build may have removed its standalone stylesheet.
+            if 'styles.css' not in files:
+                changes.append((config / 'plugins' / plugin / 'styles.css', None))
+    changes = [(p, data) for p, data in changes
+               if (p.read_bytes() if p.exists() else None) != data]
+    print(f'{len(enabled)} enabled plugins across {len(VAULTS)} vaults; {len(changes)} file changes.')
+    for plugin, source in sources.items():
+        print(f'  {plugin}: {source.relative_to(ROOT)}')
+    if not args.apply:
+        print('Preview only. Close Obsidian, then rerun with --apply to sync.')
+        return
+    backup = ROOT / '.vault-tools/backups' / datetime.now().strftime('%Y%m%d-%H%M%S-%f')
+    journal = []
+    for path, data in changes:
+        relative = path.relative_to(ROOT)
+        present = path.exists() or path.is_symlink()
+        journal.append({'path': str(relative), 'existed': present})
+        if present:
+            target = backup / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, target, follow_symlinks=False)
+    if changes:
+        backup.mkdir(parents=True, exist_ok=True)
+        (backup / 'changes.json').write_text(json.dumps(journal, indent=2) + '\n')
+    for path, data in changes:
+        if data is None:
+            path.unlink()
+        else:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            # Replace the entry atomically, rather than following legacy symlinks.
+            with tempfile.NamedTemporaryFile(dir=path.parent, delete=False) as tmp:
+                tmp.write(data)
+                temporary = Path(tmp.name)
+            temporary.replace(path)
+    for vault in VAULTS:
+        config = vault / '.obsidian'
+        assert json.loads((config / 'community-plugins.json').read_text()) == enabled
+        for plugin, files in payloads.items():
+            for name, content in files.items():
+                assert (config / 'plugins' / plugin / name).read_bytes() == content
+    print('Verified: enabled lists and plugin code match. Settings and workspaces untouched.')
+    if changes:
+        print(f'Backup: {backup}')
+
+
+if __name__ == '__main__':
+    main()

@@ -11,3 +11,10 @@ Install with:
   pi install npm:pi-subagents
   pi install npm:pi-ask-user
 <!-- END COMPOUND PI TOOL MAP -->
+
+## PR branding preference
+
+- Do not add Compound Engineering branding, watermarks, badges, promotional links, or `ce-engineering` tags/labels to pull requests.
+- Keep PR branding off across all workflows, including `ce-work` and `ce-commit-push-pr`. This user preference overrides skill-generated `branding:on` defaults: replace them with `branding:off` rather than passing both tokens.
+- When rewriting an existing PR, remove Compound Engineering promotional branding while preserving substantive content and human contributor credit.
+- Only add this branding if the user explicitly requests it for that PR. Preserve any repository-required disclosure.

@@ -67,14 +67,9 @@ brew bundle --file Brewfile --no-upgrade
 
 Install recorded runtime versions as needed from `runtime-versions.txt`:
 
-- Install/select Node `22.19.0` with nvm, then restore global npm packages:
-
-```bash
-nvm install 22.19.0
-nvm alias default 22.19.0
-nvm use 22.19.0
-brew bundle --file npm-global.Brewfile --no-upgrade
-```
+- Install/select the Node version required by the current project. The recorded `22.19.0` and `npm-global.Brewfile` are historical snapshots, not instructions to downgrade the current machine or globally reinstall Pi extensions.
+- Install Pi with its official standalone installer, check out `~/Developer/pi-staff-workflow`, then run `pi update --extensions` to reconcile the packages declared in `~/.pi/agent/settings.json`.
+- Configure optional `[data.pi_memory]` and `[data.pi_local]` values in the local Chezmoi config before applying Pi templates (see the repository README). Keep private repository URLs, project paths, and OAuth/authentication state out of Git.
 - Install/select Tuist `4.29.0` with mise.
 - Install Java 17 (Azul Zulu 17 or approved equivalent) and confirm `/usr/libexec/java_home -v 17`.
 - Install required Python and Ruby versions with pyenv/rbenv.
